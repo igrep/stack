@@ -203,11 +203,10 @@ configFromConfigMonoid configStackRoot configUserConfigPath mresolver mproject c
      configWorkDir <- parseRelDir (fromMaybe ".stack-work" configMonoidWorkDir)
      let configConnectionCount = fromMaybe 8 configMonoidConnectionCount
          configHideTHLoading = fromMaybe True configMonoidHideTHLoading
-         configLatestSnapshotUrl = fromMaybe
-            "https://s3.amazonaws.com/haddock.stackage.org/snapshots.json"
-            configMonoidLatestSnapshotUrl
-         configUrls = urlsFromMonoid configMonoidUrls
-         configPackageIndices = fromMaybe
+         maybeConfigLatestSnapshotUrl = configMonoidLatestSnapshotUrl
+
+     configUrls <- urlsFromMonoid maybeConfigLatestSnapshotUrl configMonoidUrls
+     let configPackageIndices = fromMaybe
             [PackageIndex
                 { indexName = IndexName "Hackage"
                 , indexLocation = ILGitHttp

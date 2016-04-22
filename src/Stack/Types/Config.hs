@@ -24,7 +24,6 @@ module Stack.Types.Config
   ,Config(..)
   ,HasConfig(..)
   ,askConfig
-  ,askLatestSnapshotUrl
   ,explicitSetupDeps
   ,getMinimalEnvOverride
   -- ** BuildConfig & HasBuildConfig
@@ -219,9 +218,6 @@ data Config =
          -- ^ The variant of GHC requested by the user.
          -- In most cases, use 'BuildConfig' or 'MiniConfig's version instead,
          -- which will have an auto-detected default.
-         ,configLatestSnapshotUrl   :: !Text
-         -- ^ URL for a JSON file containing information on the latest
-         -- snapshots available.
          ,configUrls                :: !Urls
          -- ^ URLs for other files used by stack.
          -- TODO: Better document
@@ -1226,10 +1222,6 @@ instance Exception ConfigException
 -- | Helper function to ask the environment and apply getConfig
 askConfig :: (MonadReader env m, HasConfig env) => m Config
 askConfig = liftM getConfig ask
-
--- | Get the URL to request the information on the latest snapshots
-askLatestSnapshotUrl :: (MonadReader env m, HasConfig env) => m Text
-askLatestSnapshotUrl = asks (configLatestSnapshotUrl . getConfig)
 
 -- | Root for a specific package index
 configPackageIndexRoot :: (MonadReader env m, HasConfig env, MonadThrow m) => IndexName -> m (Path Abs Dir)
